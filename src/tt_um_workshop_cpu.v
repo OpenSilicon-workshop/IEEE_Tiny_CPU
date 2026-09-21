@@ -11,7 +11,7 @@
 //   uio_oe       -> 8'h03          (bits 0,1 output, rest inputs)
 // ============================================================================
 
-module tt_um_wokshop_cpu (
+module tt_um_workshop_cpu (
     input  wire       clk,
     input  wire       rst_n,
     input  wire       ena,
