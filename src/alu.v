@@ -1,25 +1,25 @@
 // =====================================================================
-//  alu.v  --  وحدة الحساب والمنطق
+//  alu.v  --  arithmetic and logic unit
 //  Workshop: designing a simple CPU for TinyTapeout
 //  This is the module built in the Day 2 hands-on exercise.
 // =====================================================================
 `default_nettype none
 
 module alu (
-    input  wire [7:0] a,      // المدخل الأول (عادةً المركم / accumulator)
-    input  wire [7:0] b,      // المدخل الثاني (عادةً قيمة من الذاكرة)
-    input  wire [2:0] op,     // العملية المطلوبة
-    output reg  [7:0] y,      // الناتج
-    output wire       zero    // علم الصفر: يساوي 1 إذا كان الناتج = 0
+ input wire [7:0] a, // input ( / accumulator)
+ input wire [7:0] b, // input ( memory)
+    input  wire [2:0] op,     // requested operation
+    output reg  [7:0] y,      // result
+ output wire zero // zero flag: equals 1 result = 0
 );
 
-  // رموز العمليات
+  // opcode definitions
   localparam ALU_ADD   = 3'd0;
   localparam ALU_SUB   = 3'd1;
   localparam ALU_AND   = 3'd2;
   localparam ALU_OR    = 3'd3;
-  localparam ALU_PASSB = 3'd4;  // تمرير المدخل b كما هو (تُستخدم في LDA)
-  localparam ALU_DEC   = 3'd5;  // إنقاص a بمقدار 1
+ localparam ALU_PASSB = 3'd4; // input b unchanged ( LDA)
+ localparam ALU_DEC = 3'd5; // decrement a 1
 
   always @(*) begin
     case (op)
