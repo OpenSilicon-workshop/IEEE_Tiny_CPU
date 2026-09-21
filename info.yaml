@@ -9,57 +9,56 @@ project:
   discord:      ""
   description:  "8-bit accumulator CPU using a real IHP 256x8 SRAM macro for data memory; multi-cycle to tolerate the macro's registered read latency"
   language:     "Verilog"
-  clock_hz:     1000
+  clock_hz:     5000000
 
-  # The 256x8 single-port IHP SRAM macro needs a minimum of 1x2 tiles
-  # and uses ~27.7% of that tile's area (per tinytapeout.com/specs/memory,
-  # confirmed against the official comparison table). The rest of our
-  # logic (ALU, control unit, ROM, ~15 flip-flops) is small and should
-  # fit in the remaining ~72%. NOTE: the macro requires a 90-degree
-  # rotation to fit in 1x2 -- check the synthesis/placement report to confirm.
-  tiles: "1x2"    # allowed values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2, 8x2
+  # How many tiles your design occupies? A single tile is about 167x108 uM.
+  tiles: "1x2"
 
-  # Top module name must start with "tt_um_".
-  # Make it unique by including your GitHub username, e.g. tt_um_yourname_cpu_ihp
-  top_module:  "tt_um_workshop_cpu_ihp"
+  # Your top module name must start with "tt_um_". Make it unique by including your github username:
+  top_module:  "tt_um_fidel_makatia_digital_tapeout"
 
-  # Every source file must live in ./src and be listed here.
+  # List your project's source files here.
+  # Source files must be in ./src and you must list each source file separately, one per line.
   source_files:
+    - "tt_um_workshop_cpu.v"
+    - "soc_top.v"
     - "alu.v"
-    - "rom.v"
-    - "ihp_sram_256x8.v"
-    - "cpu_ihp.v"
-    - "tt_um_workshop_cpu_ihp.v"
+    - "control.v"
+    - "program_rom.v"
+    - "regfile.v"
+    - "gpio.v"
+    - "uart_tx.v"
+    - "timer.v"
 
-# Pin mapping. Leave unused pins blank. Do not add or remove any pin.
+# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
   # Inputs
-  ui[0]: "in_port[0]"
-  ui[1]: "in_port[1]"
-  ui[2]: "in_port[2]"
-  ui[3]: "in_port[3]"
-  ui[4]: "in_port[4]"
-  ui[5]: "in_port[5]"
-  ui[6]: "in_port[6]"
-  ui[7]: "in_port[7]"
+  ui[0]: "gpio_in[0]"
+  ui[1]: "gpio_in[1]"
+  ui[2]: "gpio_in[2]"
+  ui[3]: "gpio_in[3]"
+  ui[4]: "gpio_in[4]"
+  ui[5]: "gpio_in[5]"
+  ui[6]: "gpio_in[6]"
+  ui[7]: "gpio_in[7]"
 
   # Outputs
-  uo[0]: "out_port[0]"
-  uo[1]: "out_port[1]"
-  uo[2]: "out_port[2]"
-  uo[3]: "out_port[3]"
-  uo[4]: "out_port[4]"
-  uo[5]: "out_port[5]"
-  uo[6]: "out_port[6]"
-  uo[7]: "out_port[7]"
+  uo[0]: "gpio_out[0]"
+  uo[1]: "gpio_out[1]"
+  uo[2]: "gpio_out[2]"
+  uo[3]: "gpio_out[3]"
+  uo[4]: "gpio_out[4]"
+  uo[5]: "gpio_out[5]"
+  uo[6]: "gpio_out[6]"
+  uo[7]: "gpio_out[7]"
 
-  # Bidirectional pins (all outputs in this design)
-  uio[0]: "pc[0]"
-  uio[1]: "pc[1]"
-  uio[2]: "pc[2]"
-  uio[3]: "pc[3]"
-  uio[4]: "halted"
-  uio[5]: "phase (0=ADDR, 1=DATA)"
+  # Bidirectional pins
+  uio[0]: "halted (output)"
+  uio[1]: "uart_tx (output)"
+  uio[2]: ""
+  uio[3]: ""
+  uio[4]: ""
+  uio[5]: ""
   uio[6]: ""
   uio[7]: ""
 
