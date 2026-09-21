@@ -163,27 +163,9 @@ make wave
 
 ---
 
-## 8. TinyTapeout
-
-1. ** ** GitHub
- ( `ttihp-verilog-template`) *Use this template*.
-2. `src/` `src/` .
-3. `info.yaml`: `top_module` 
- GitHub ( `tt_um_yourname_cpu`) 
- Verilog .
-4. `docs/info.md` .
-5. (`git push`) **GitHub Actions**.
-6. check the synthesis report (Synthesis/GDS) Action: 
- `tiles`.
-7. TinyTapeout ** **.
-
-> ⚠️ **:** `info.yaml` `yaml_version` .
-> `info.yaml` 
-> unchanged.
-
 ---
 
-## 9. 
+## 8. 
 
 ```
 cpu_project/
