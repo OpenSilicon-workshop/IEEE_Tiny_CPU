@@ -2,7 +2,8 @@
 ![](../../workflows/docs/badge.svg)
 ![](../../workflows/test/badge.svg)
 ![](../../workflows/fpga/badge.svg)
-Workshop 8-bit Accumulator CPU SoC
+# Workshop 8-bit Accumulator CPU SoC
+
 An educational 8-bit accumulator-based microcontroller implemented in Verilog for Tiny Tapeout.
 Overview
 The project combines:
