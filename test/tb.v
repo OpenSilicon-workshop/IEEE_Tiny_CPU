@@ -27,7 +27,7 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  tt_um_workshop_cpu (
+  tt_um_workshop_cpu user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST

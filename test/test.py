@@ -1,5 +1,3 @@
-# SPDX-FileCopyrightText: © 2024 Fidel Makatia
-# SPDX-License-Identifier: Apache-2.0
 
 import cocotb
 from cocotb.clock import Clock
