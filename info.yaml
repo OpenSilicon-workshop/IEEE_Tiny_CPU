@@ -4,7 +4,7 @@
 # (e.g. ttihp-verilog-template) since the schema changes between
 # shuttles -- especially yaml_version.
 project:
-  title:        "Workshop Simple CPU (IHP SRAM variant)"
+  title:        "IEEE Workshop Simple CPU"
   author:       "Hadjer Bouyahiaoui, Maria Debbaghi"
   discord:      ""
   description:  "8-bit accumulator CPU using a real IHP 256x8 SRAM macro for data memory; multi-cycle to tolerate the macro's registered read latency"
