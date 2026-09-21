@@ -1,20 +1,25 @@
-<!---
-
-This file is used to generate your project datasheet. Please fill in the information below and delete any unused
-sections.
-
-You can also include images in this folder and reference them in the markdown. Each image must be less than
-512 kb in size, and the combined size of all images must be less than 1 MB.
--->
+# Workshop Simple CPU
 
 ## How it works
 
-Explain how your project works
+This project implements a small **8-bit accumulator CPU** designed as an educational Tiny Tapeout project.
 
-## How to test
+The CPU contains:
 
-Explain how to use your project
+- A **4-bit program counter (PC)**, allowing up to 16 program instructions.
+- A **16 × 8-bit program ROM** implemented as synthesizable Verilog `case` logic.
+- A **16 × 8-bit data RAM** used by load, store, arithmetic, and logic instructions.
+- An **8-bit accumulator (ACC)** used as the main working register.
+- An **ALU** supporting addition, subtraction, AND, OR, pass-through, and decrement.
+- A **zero flag (Z)** used by the conditional `JZ` instruction.
+- An 8-bit input port and an 8-bit output port.
+- A `halted` status output for observing when the CPU executes `HLT`.
 
-## External hardware
+The CPU uses an 8-bit instruction format:
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+```text
+  7       4 3       0
+ +---------+---------+
+ | opcode  | operand |
+ +---------+---------+
+    4 bits    4 bits
