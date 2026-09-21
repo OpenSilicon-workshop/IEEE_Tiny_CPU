@@ -1,57 +1,65 @@
 # Tiny Tapeout project information
+#
+# NOTE: always check the info.yaml in the CURRENT shuttle's template
+# (e.g. ttihp-verilog-template) since the schema changes between
+# shuttles -- especially yaml_version.
 project:
-  title:        "IEEE_Tiny_CPU"      # Project title
-  author:       "Hadjer Bouyahiaoui"      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "An 8-bit accumulator CPU with a 14-instruction ISA, built in an Arabic-language workshop"      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     10000000       # Clock frequency in Hz (or 0 if not applicable)
+  title:        "Workshop Simple CPU (IHP SRAM variant)"
+  author:       "Hadjer Bouyahiaoui, Maria Debbaghi"
+  discord:      ""
+  description:  "8-bit accumulator CPU using a real IHP 256x8 SRAM macro for data memory; multi-cycle to tolerate the macro's registered read latency"
+  language:     "Verilog"
+  clock_hz:     1000
 
-  # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x2"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+  # The 256x8 single-port IHP SRAM macro needs a minimum of 1x2 tiles
+  # and uses ~27.7% of that tile's area (per tinytapeout.com/specs/memory,
+  # confirmed against the official comparison table). The rest of our
+  # logic (ALU, control unit, ROM, ~15 flip-flops) is small and should
+  # fit in the remaining ~72%. NOTE: the macro requires a 90-degree
+  # rotation to fit in 1x2 -- check the synthesis/placement report to confirm.
+  tiles: "1x2"    # allowed values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2, 8x2
 
-  # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_workshop_cpu"
+  # Top module name must start with "tt_um_".
+  # Make it unique by including your GitHub username, e.g. tt_um_yourname_cpu_ihp
+  top_module:  "tt_um_workshop_cpu_ihp"
 
-  # List your project's source files here.
-  # Source files must be in ./src and you must list each source file separately, one per line.
-  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
+  # Every source file must live in ./src and be listed here.
   source_files:
     - "alu.v"
     - "rom.v"
-    - "cpu.v"
-    - "tt_um_workshop_cpu.v"
+    - "ihp_sram_256x8.v"
+    - "cpu_ihp.v"
+    - "tt_um_workshop_cpu_ihp.v"
 
-# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
-# This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
+# Pin mapping. Leave unused pins blank. Do not add or remove any pin.
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "in_port[0]"
+  ui[1]: "in_port[1]"
+  ui[2]: "in_port[2]"
+  ui[3]: "in_port[3]"
+  ui[4]: "in_port[4]"
+  ui[5]: "in_port[5]"
+  ui[6]: "in_port[6]"
+  ui[7]: "in_port[7]"
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "out_port[0]"
+  uo[1]: "out_port[1]"
+  uo[2]: "out_port[2]"
+  uo[3]: "out_port[3]"
+  uo[4]: "out_port[4]"
+  uo[5]: "out_port[5]"
+  uo[6]: "out_port[6]"
+  uo[7]: "out_port[7]"
 
-  # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
+  # Bidirectional pins (all outputs in this design)
+  uio[0]: "pc[0]"
+  uio[1]: "pc[1]"
+  uio[2]: "pc[2]"
+  uio[3]: "pc[3]"
+  uio[4]: "halted"
+  uio[5]: "phase (0=ADDR, 1=DATA)"
   uio[6]: ""
   uio[7]: ""
 

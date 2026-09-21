@@ -1,49 +1,42 @@
-// =====================================================================
-//  tt_um_workshop_cpu.v  --  main wrapper submitted to TinyTapeout
+// ============================================================================
+// TinyTapeout Wrapper - 8-bit Accumulator CPU SoC
+// ============================================================================
+// Wraps the soc_top module for TinyTapeout submission.
 //
-//  The module name must start with tt_um_ as required by the official template.
-//  Each TinyTapeout design has 8 inputs and8 outputs and8 bidirectional pins.
-//
-//  Pin assignment in this project:
-//    ui_in  [7:0] : external data input read by the IN instruction
-//    uo_out [7:0] : output register (written by the OUT instruction)
-//    uio_out[3:0] : program counter PC (for observation during testing)
-//    uio_out[4]   : halt signal halted
-// uio_out[7:5] : unused ()
-// =====================================================================
-`default_nettype none
+// Pin Mapping:
+//   ui_in[7:0]   -> gpio_in[7:0]   (dedicated inputs)
+//   uo_out[7:0]  -> gpio_out[7:0]  (dedicated outputs)
+//   uio_out[0]   -> halted         (CPU halt status)
+//   uio_out[1]   -> uart_tx        (UART serial output)
+//   uio_oe       -> 8'h03          (bits 0,1 output, rest inputs)
+// ============================================================================
 
-module tt_um_workshop_cpu (
-    input  wire [7:0] ui_in,    // dedicated inputs
-    output wire [7:0] uo_out,   // dedicated outputs
-    input  wire [7:0] uio_in,   // bidirectional pins: input
-    output wire [7:0] uio_out,  // bidirectional pins: output
- output wire [7:0] uio_oe, // bidirectional pins: output enable (1 = )
-    input  wire       ena,      // always high when the design is enabled
-    input  wire       clk,      // clock
-    input  wire       rst_n     // reset (active low)
+module tt_um_fidel_makatia_digital_tapeout (
+    input  wire       clk,
+    input  wire       rst_n,
+    input  wire       ena,
+    input  wire [7:0] ui_in,
+    output wire [7:0] uo_out,
+    input  wire [7:0] uio_in,
+    output wire [7:0] uio_out,
+    output wire [7:0] uio_oe
 );
 
-  wire [7:0] out_port;
-  wire [3:0] pc_out;
-  wire       halted;
+    wire       halted;
+    wire       uart_tx_out;
+    wire [7:0] gpio_out_internal;
 
-  cpu u_cpu (
-      .clk     (clk),
-      .rst_n   (rst_n),
-      .in_port (ui_in),
-      .out_port(out_port),
-      .halted  (halted),
-      .pc_out  (pc_out)
-  );
+    soc_top u_soc (
+        .clk         (clk),
+        .rst_n       (rst_n & ena),
+        .gpio_out    (gpio_out_internal),
+        .gpio_in     (ui_in),
+        .uart_tx_out (uart_tx_out),
+        .halted      (halted)
+    );
 
-  assign uo_out  = out_port;
-  assign uio_out = {3'b000, halted, pc_out};
-  assign uio_oe  = 8'hFF;  // all bidirectional pins are outputs
-
-  // prevent unused-signal warnings
-  wire _unused = &{ena, uio_in, 1'b0};
+    assign uo_out  = gpio_out_internal;
+    assign uio_out = {6'b0, uart_tx_out, halted};
+    assign uio_oe  = 8'h03;
 
 endmodule
-
-`default_nettype wire
